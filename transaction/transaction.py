@@ -124,3 +124,20 @@ class Transaction(ABC):
        """
        raise NotImplementedError
     
+
+    @staticmethod
+    def _format_currency(value: Decimal) -> str:
+        """
+        Format a Decimal amount as a currency string with two decimal places.
+
+        Args:
+            value (Decimal): The amount to format.
+
+        Returns:
+            str: The formatted currency string.
+        """
+        rounded_value = value.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        return f"${value:,.2f}"
+
+
+    
