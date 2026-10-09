@@ -65,3 +65,27 @@ class BankTransferTransaction(Transaction):
         percentage_fee = self.amount * self.FEE_RATE
         fee = max(self.BASE_FEE, percentage_fee)
         return fee.quantize(Decimal("0.01"))  # Round to 2 decimal places
+
+    def process(self) -> None:
+        """
+        Process the bank transfer transaction.
+        This method deducts the amount and fees from the source account and credits the target account.
+        It updates the transaction status to PROCESSED if successful, or FAILED if an error occurs.
+
+        Raises:
+            ValueError: If the source account has insufficient funds for the transfer and fees.
+        """
+        source_active = (self._account.status.name.upper() == "ACTIVE")
+
+        target_active = (self._target_account.status.name.upper() == "ACTIVE")
+
+        sufficient_funds = (self._amount + self.fees) <= self._account.balance
+        if not (source_active and target_active and sufficient_funds):
+            self._status = TransactionStatus.FAILED
+            return
+
+        if self.status == TransactionStatus.PENDING:
+            self._account.withdraw(self._amount)
+            self._account.withdraw(self.fees)
+            self._target_account.deposit(self._amount)
+            self._status = TransactionStatus.PROCESSED
