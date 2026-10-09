@@ -57,3 +57,59 @@ def transaction_id(self) -> str:
         str: The transaction ID.
     """
     return self._transaction_id
+
+@property
+def amount(self) -> Decimal:
+    """
+    Get the amount of money involved in the transaction.
+
+    Returns:
+        Decimal: The transaction amount.
+    """
+    return self._amount
+
+@property
+def status(self) -> TransactionStatus:
+    """
+    Get the status of the transaction.
+
+    Returns:
+        TransactionStatus: The transaction status.
+    """
+    return self._status
+
+@status.setter
+def status(self, value: TransactionStatus) -> None:
+    """
+    Set the status of the transaction.
+
+    Args:
+        value (TransactionStatus): The new status to set for the transaction.
+    """
+    self._status = value
+
+
+@property
+def account(self) -> BankAccount:
+    """
+    Get the bank account associated with the transaction.
+
+    Returns:
+        BankAccount: The associated bank account.
+    """
+    return self._account
+
+@property
+@abstractmethod
+def fees(self) -> Decimal:
+    """
+    Abstract property to get the fees associated with the transaction.
+    Subclasses must implement this property to calculate and return the fees.
+
+    Returns:
+        Decimal: The fees associated with the transaction.
+    """
+    raise NotImplementedError
+
+
+
