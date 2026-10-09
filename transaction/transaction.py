@@ -48,68 +48,79 @@ class Transaction(ABC):
         self._status: TransactionStatus = TransactionStatus.PENDING
         self._account: BankAccount = account
 
-@property
-def transaction_id(self) -> str:
-    """
-    Get the unique identifier for the transaction.
+    @property 
+    def transaction_id(self) -> str:
+       """
+       Get the unique identifier for the transaction.
 
-    Returns:
-        str: The transaction ID.
-    """
-    return self._transaction_id
+       Returns:
+       str: The transaction ID.
+       """
+       return self._transaction_id
 
-@property
-def amount(self) -> Decimal:
-    """
-    Get the amount of money involved in the transaction.
+    @property
+    def amount(self) -> Decimal:
+       """
+       Get the amount of money involved in the transaction.
 
-    Returns:
+       Returns:
         Decimal: The transaction amount.
-    """
-    return self._amount
+       """
+       return self._amount
 
-@property
-def status(self) -> TransactionStatus:
-    """
-    Get the status of the transaction.
+    @property
+    def status(self) -> TransactionStatus:
+       """
+       Get the status of the transaction.
 
-    Returns:
+       Returns:
         TransactionStatus: The transaction status.
-    """
-    return self._status
+       """
+       return self._status
 
-@status.setter
-def status(self, value: TransactionStatus) -> None:
-    """
-    Set the status of the transaction.
+    @status.setter
+    def status(self, value: TransactionStatus) -> None:
+       """
+       Set the status of the transaction.
 
-    Args:
-        value (TransactionStatus): The new status to set for the transaction.
-    """
-    self._status = value
+       Args:
+         Value (TransactionStatus): The new status to set for the transaction.
+       """
+       self._status = value
 
 
-@property
-def account(self) -> BankAccount:
-    """
-    Get the bank account associated with the transaction.
+    @property
+    def account(self) -> BankAccount:
+       """
+       Get the bank account associated with the transaction.
 
-    Returns:
+       Returns:
         BankAccount: The associated bank account.
-    """
-    return self._account
+       """
+       return self._account
 
-@property
-@abstractmethod
-def fees(self) -> Decimal:
-    """
-    Abstract property to get the fees associated with the transaction.
-    Subclasses must implement this property to calculate and return the fees.
+    @property
+    @abstractmethod
+    def fees(self) -> Decimal:
+       """
+       Abstract property to get the fees associated with the transaction.
+       Subclasses must implement this property to calculate and return the fees.
 
-    Returns:
+       Returns:
         Decimal: The fees associated with the transaction.
-    """
-    raise NotImplementedError
+       """
+       raise NotImplementedError
 
 
+    @abstractmethod
+    def process(self) -> None:
+       """
+       Abstract method to process the transaction.
+       Subclasses must implement this method to define the specific processing logic for the transaction.
+       This method should update the transaction status accordingly.
 
+       Raises:
+          NotImplementedError: If the method is not implemented in a subclass.
+       """
+       raise NotImplementedError
+    
