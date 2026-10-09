@@ -6,6 +6,7 @@ __author__ = "Dong Le Quoc Bao"
 __version__ = "1.0.0"
 
 from decimal import Decimal
+from account.bank_account import BankAccount
 from transaction.transaction import Transaction
 from transaction.transaction_status import TransactionStatus
 
@@ -89,3 +90,17 @@ class BankTransferTransaction(Transaction):
             self._account.withdraw(self.fees)
             self._target_account.deposit(self._amount)
             self._status = TransactionStatus.PROCESSED
+
+
+    def __str__(self) -> str:
+        """
+        Return a string representation of the bank transfer transaction.
+
+        Returns:
+            str: A string describing the transaction details, including ID, amount, status, source account, target account, and fees.
+        """
+        return (f"ID: {self.transaction_id}, "
+                f"STATUS: {self.status.name}, "
+                f"AMOUNT: {self._format_currency(self.amount)}, "
+                f"SOURCE ACCOUNT: {self._account.account_id}, "
+                f"-->TARGET ACCOUNT: {self._target_account.account_id}, ")
