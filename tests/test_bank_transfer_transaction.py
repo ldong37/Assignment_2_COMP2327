@@ -6,6 +6,7 @@ __author__ = "Dong Le Quoc Bao"
 __version__ = "1.0.0"
 
 from decimal import Decimal
+
 import pytest
 
 from account.bank_account import BankAccount
@@ -24,3 +25,17 @@ def source_account():
         owner=None,
         status="ACTIVE",
     )
+
+
+@pytest.fixture
+def target_account():
+    """
+    Fixture providing an active target BankAccount with $0.00.
+    """
+    return BankAccount(
+    account_id="676767",
+        balance=Decimal("0.00"),
+        owner=None,
+        status="ACTIVE",
+    )
+
