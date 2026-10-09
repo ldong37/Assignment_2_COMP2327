@@ -140,4 +140,15 @@ class Transaction(ABC):
         return f"${value:,.2f}"
 
 
-    
+    def __str__(self) -> str:
+        """
+        Return a string representation of the transaction.
+
+        Returns:
+            str: A string representation of the transaction, including its ID, amount, status, and associated account.
+        """
+        return (f"ID: {self.transaction_id}"
+                f"Amount: {self._format_currency(self.amount)}" 
+                f"Status: {self.status.name}" 
+                f"Account: {self.account.account_number}"
+        )
