@@ -40,8 +40,8 @@ class BankTransferTransaction(Transaction):
         """
         super().__init__(transaction_id, amount, account)
         
-        if target_account is None:
-            raise ValueError("Target account cannot be None.")
+        if self.amount <= 0:
+            raise ValueError("amount must be greater than zero")
         
         self._target_account: BankAccount = target_account
 
@@ -99,8 +99,8 @@ class BankTransferTransaction(Transaction):
         Returns:
             str: A string describing the transaction details, including ID, amount, status, source account, target account, and fees.
         """
-        return (f"ID: {self.transaction_id}, "
-                f"STATUS: {self.status.name}, "
-                f"AMOUNT: {self._format_currency(self.amount)}, "
-                f"SOURCE ACCOUNT: {self._account.account_id}, "
-                f"-->TARGET ACCOUNT: {self._target_account.account_id}, ")
+        return (f"ID: {self.transaction_id} "
+        f"STATUS: {self._status.name} "
+        f"AMOUNT: {self._format_currency(self.amount)} "
+        f"SOURCE ACCT: {self._account.account_id} "
+        f"--> TARGET ACCT: {self._target_account.account_id}")

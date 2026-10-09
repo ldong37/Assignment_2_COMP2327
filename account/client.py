@@ -29,7 +29,7 @@ class Client:  #Represent items in the client section
 
         self._client_id = client_id
         self._name = client_name
-        self.email_address = validated_email.email  # Store the normalized email address
+        self._email_address = validated_email.email  # Store the normalized email address
 
     @property
     def client_id(self) -> int:

@@ -18,7 +18,7 @@ class BankAccount:
             status (AccountStatus): Represents the status of the bank account.
         """
 
-        if account_id <= 0:
+        if int(account_id) <= 0:
             raise ValueError("Account ID must be a positive number.")
         self._account_id = account_id
         self._balance = balance
