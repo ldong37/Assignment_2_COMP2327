@@ -86,5 +86,17 @@ class CreditCardTransaction(Transaction):
             self._status = TransactionStatus.PROCESSED
 
 
+    def __str__(self) -> str:
+        """
+        Returns a string representation of the credit card transaction.
+
+        Returns:
+            str: A string containing the transaction ID, amount, fees, and status.
+        """
+        return (f"ID: {self._transaction_id}, "
+                f"Amount: {self._format_currency(self._amount)}, "
+                f"STATUS: {self._status.name}, "
+                f"SOURCE ACCOUNT: {self._account.account_id}, ")
+
    
 
