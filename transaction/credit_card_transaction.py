@@ -52,4 +52,39 @@ class CreditCardTransaction(Transaction):
         """
         return self._authorization_code
 
+    @property
+    def fees(self) -> Decimal:
+        """
+        Calculate the fees associated with the credit card transaction.
+
+        Returns:
+            Decimal: The calculated fees based on the transaction amount and fee rate.
+        """
+        fee = self._amount * self.FEE_RATE
+        return fee.quantize(Decimal("0.01"))
+
+    def process(self) -> None:
+        """
+        Process the credit card transaction by deducting the amount and fees from the associated bank account.
+        Updates the transaction status to PROCESSED if successful, or FAILED if an error occurs.
+
+        Raises:
+            ValueError: If the account balance is insufficient to cover the amount and fees.
+        """
+        account_active = (self._account.status.name.upper == "ACTIVE")
+        sufficient_funds = (self._amount + self.fees) <= self._account.balance
+        auth_present = self._authorization_code.strip() != ""
+
+
+        if not (account_active and sufficient_funds and auth_present):
+            self._status = TransactionStatus.FAILED
+            return
+
+        if self.status == TransactionStatus.PENDING:
+            self._account.withdraw(self._amount)
+            self._account.withdraw(self.fees)
+            self._status = TransactionStatus.PROCESSED
+
+
+   
 

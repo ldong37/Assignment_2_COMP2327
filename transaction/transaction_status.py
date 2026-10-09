@@ -1,9 +1,6 @@
 """
 Enumeration representing the status of a transaction.
 List 3 lifecycle states are Pending, Processed and Failed
-
-Author: Dong Le Quoc Bao 
-Date: 2026-10-09
 """
 
 __author__ = "Dong Le Quoc Bao"
