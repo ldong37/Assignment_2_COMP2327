@@ -48,4 +48,12 @@ class Transaction(ABC):
         self._status: TransactionStatus = TransactionStatus.PENDING
         self._account: BankAccount = account
 
-    
+@property
+def transaction_id(self) -> str:
+    """
+    Get the unique identifier for the transaction.
+
+    Returns:
+        str: The transaction ID.
+    """
+    return self._transaction_id
