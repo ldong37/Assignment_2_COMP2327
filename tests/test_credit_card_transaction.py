@@ -121,7 +121,7 @@ class TestProcess:
         assert txn.status == TransactionStatus.FAILED
         
     
-def test_insufficient_funds_fails(self,active_account):
+    def test_insufficient_funds_fails(self,active_account):
         """If the account has insufficient funds, the transaction fails."""
         txn = CreditCardTransaction(
             "CC001",
@@ -131,3 +131,47 @@ def test_insufficient_funds_fails(self,active_account):
         )
         txn.process()
         assert txn.status == TransactionStatus.FAILED
+        
+    
+    def test_blank_authorization_code_fails(self, active_account):
+        """Blank authorization code causes status FAILED."""
+        txn = CreditCardTransaction(
+            "CC005",
+            Decimal("100.00"),
+            active_account,
+            "   ",
+        )
+        txn.process()
+        assert txn.status == TransactionStatus.FAILED
+
+    def test_successful_processing(self, active_account):
+        """Valid transaction updates balance and status."""
+        txn = CreditCardTransaction(
+            "CC006",
+            Decimal("100.00"),
+            active_account,
+            "AUTH123",
+        )
+        txn.process()
+
+        assert txn.status == TransactionStatus.PROCESSED
+        assert active_account.balance == Decimal("898.00")
+        
+class TestStr:
+    """Tests for the CreditCardTransaction string representation."""
+
+    def test_returns_string_representation(self, active_account):
+        """String representation matches the expected format."""
+        txn = CreditCardTransaction(
+            "98765",
+            Decimal("2983.35"),
+            active_account,
+            "AUTH123",
+        )
+        expected = (
+            "ID: 98765 "
+            "STATUS: PENDING "
+            "AMOUNT: $2,983.35 "
+            "SOURCE ACCT: 123456"
+        )
+        assert str(txn) == expected
