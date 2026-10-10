@@ -71,7 +71,7 @@ class CreditCardTransaction(Transaction):
         Raises:
             ValueError: If the account balance is insufficient to cover the amount and fees.
         """
-        account_active = (self._account.status.name.upper == "ACTIVE")
+        account_active = (self._account.status.name.upper() == "ACTIVE")
         sufficient_funds = (self._amount + self.fees) <= self._account.balance
         auth_present = self._authorization_code.strip() != ""
 
@@ -88,15 +88,18 @@ class CreditCardTransaction(Transaction):
 
     def __str__(self) -> str:
         """
-        Returns a string representation of the credit card transaction.
+        Return a string representation of the transaction.
 
         Returns:
-            str: A string containing the transaction ID, amount, fees, and status.
+        str: The formatted transaction details.
         """
-        return (f"ID: {self._transaction_id}, "
-                f"Amount: {self._format_currency(self._amount)}, "
-                f"STATUS: {self._status.name}, "
-                f"SOURCE ACCOUNT: {self._account.account_id}, ")
+        return (
+        f"ID: {self._transaction_id} "
+        f"STATUS: {self._status.name} "
+        f"AMOUNT: {self._format_currency(self._amount)} "
+        f"SOURCE ACCT: {self._account.account_id} "
+        f"AUTH CODE: {self._authorization_code}"
+    )
 
    
 

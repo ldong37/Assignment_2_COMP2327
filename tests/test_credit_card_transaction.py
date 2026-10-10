@@ -17,7 +17,6 @@ from transaction.transaction_status import TransactionStatus
 
 
 @pytest.fixture
-
 def active_account():
     """
     Fixture providing an active BankAccount with $1000.00.
