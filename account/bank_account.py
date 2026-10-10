@@ -19,7 +19,7 @@ class BankAccount:
         """
 
         if int(account_id) <= 0:
-            raise ValueError("Account ID must be a positive number.")
+            raise ValueError("accountid must be a positive number.")
         self._account_id = account_id
         self._balance = balance
         self._owner = owner
@@ -63,7 +63,7 @@ class BankAccount:
              ValueError: If the amount is not positive.
         """
         if amount <= 0:
-            raise ValueError("Deposit amount must be positive.")
+            raise ValueError("deposit amount must be positive.")
         self.update_balance(amount)
 
     def withdraw(self, amount: Decimal) -> None:
@@ -76,9 +76,9 @@ class BankAccount:
               ValueError: If the amount is not positive or exceeds the current balance.
         """
         if amount <= 0:
-           raise ValueError("Withdrawal amount must be positive.")
+           raise ValueError("withdrawal amount must be positive.")
         if amount > self._balance:
-           raise ValueError("Insufficient funds for withdrawal.")
+           raise ValueError("insufficient funds for withdrawal.")
         self.update_balance(-amount)
 
     def __str__(self) -> str:

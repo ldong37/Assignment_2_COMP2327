@@ -38,10 +38,10 @@ class Transaction(ABC):
             ValueError: If the transaction_id is a blank string.
         """
         if transaction_id.strip() == "":
-            raise ValueError("transaction ID cannot be blank.")
+            raise ValueError("transactionid cannot be blank.")
 
         if amount <= Decimal ("0"):
-            raise ValueError("transaction amount must be a positive number.")
+            raise ValueError("amount must be greater than zero")
 
         self._transaction_id: str = transaction_id
         self._amount: Decimal = amount

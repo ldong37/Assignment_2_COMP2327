@@ -39,9 +39,8 @@ class BankTransferTransaction(Transaction):
             ValueError: If the source or target account is None.
         """
         super().__init__(transaction_id, amount, account)
-        
-        if self.amount <= 0:
-            raise ValueError("amount must be greater than zero")
+        if self.amount <= Decimal ("0"):
+            raise ValueError("amount must be a positive number")
         
         self._target_account: BankAccount = target_account
 
