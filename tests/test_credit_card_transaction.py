@@ -101,3 +101,16 @@ class TestFees:
         assert txn.fees == expected_fee
 
 
+class TestProcess:
+    """Tests for the CreditCardTransaction.process method when the transaction is successful."""
+    def test_returns_two_percent_of_amount(self, active_account):
+        """Fees equal to 2% of the transaction amount, rounded to two decimal places."""
+        txn = CreditCardTransaction(
+            "CC001",
+            Decimal("100.00"),
+            active_account,
+            "AUG111",
+        )
+        txn.process()
+        expected_fee = Decimal("2.00")  # 2% of  100.00
+        assert txn.fees == expected_fee
