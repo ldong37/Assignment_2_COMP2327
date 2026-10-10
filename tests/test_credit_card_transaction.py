@@ -6,38 +6,80 @@ __author__ = "Dong Le Quoc Bao"
 __version__ = "1.0.0"
 
 from decimal import Decimal
+
+import pytest
+
 from account.bank_account import BankAccount
-from transaction.transaction import Transaction
+from account.account_status import AccountStatus
+from transaction.credit_card_transaction import CreditCardTransaction
 from transaction.transaction_status import TransactionStatus
 
 
-class CreditCardTransaction(Transaction):
+@pytest.fixture
+
+def active_account():
     """
-    Concrete implementation of a credit card transaction.
-    This class represents a specific type of transaction that involves processing payments using a credit card.
-    It includes methods for executing the payment, validating the card information, and handling any errors that may arise during the process.
+    Fixture providing an active BankAccount with $1000.00.
     """
-    FEE_RATE: Decimal = Decimal("0.02")  # Fee rate as a percentage of the transaction amount
+    return BankAccount(
+        account_id=123456,
+        balance=Decimal("1000.00"),
+        owner=None,
+        status=BankAccount.AccountStatus.ACTIVE,
+    )
+    
 
-    def __init__(self, 
-                 transaction_id: str,
-                 amount: Decimal, 
-                 account: BankAccount, 
-                 authorization_code: str) -> None:
-        """
-        Initialize a CreditCardTransaction object with the specified amount, account, and authorization code.
-        The transaction status is set to PENDING by default.
+class TestInit:
+    """Tests for the CreditCardTransaction constructor."""
 
-        Args:
-            transaction_id (str): The unique identifier for the transaction.
-            amount (Decimal): The amount of money to be charged to the credit card.
-            account (BankAccount): The bank account associated with the credit card.
-            authorization_code (str): The authorization code for the transaction.
+    def test_blank_transaction_id_raises_value_error(self, active_account):
+        """Blank id raises ValueError with the expected message."""
+        with pytest.raises(
+            ValueError, match="transactionid cannot be blank"
+        ):
+            CreditCardTransaction(
+                "   ",
+                Decimal("100.00"),
+                active_account,
+                "AUG111",
+            )
 
-        Raises:
-            ValueError: If the amount is not a positive number.
-            ValueError: If the account is None.
-            ValueError: If the authorization code is invalid or blank.
-        """
-        super().__init__(transaction_id, amount, account)
-        self._authorization_code: str = authorization_code
+    def test_negative_amount_raises_value_error(self, active_account):
+        """Negative amount raises ValueError with the expected message."""
+        with pytest.raises(
+            ValueError, match="amount must be greater than zero"
+        ):
+            CreditCardTransaction(
+                "CC001",
+                Decimal("-5.00"),
+                active_account,
+                "AUG111",
+            )
+            
+            
+    def test_zero_amount_raises_value_error(self, active_account):
+        """Zero amount raises ValueError with the expected message."""
+        with pytest.raises(
+            ValueError, match="amount must be greater than zero"
+        ):
+            CreditCardTransaction(
+                "CC001",
+                Decimal("0.00"),
+                active_account,
+                "AUG111",
+            )
+            
+            
+    def test_initialize_new_instance(self, active_account):
+        """A new instance is initialized with the correct attributes to Pending."""
+        txn = CreditCardTransaction(
+            "CC001",
+            Decimal("100.00"),
+            active_account,
+            "AUG111",
+        )
+        assert txn.transaction_id == "CC001"
+        assert txn.amount == Decimal("100.00")
+        assert txn.account == active_account
+        assert txn.authorization_code == "AUG111"
+        assert txn.status == TransactionStatus.PENDING
