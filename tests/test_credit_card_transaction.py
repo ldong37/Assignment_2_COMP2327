@@ -102,15 +102,32 @@ class TestFees:
 
 
 class TestProcess:
-    """Tests for the CreditCardTransaction.process method when the transaction is successful."""
-    def test_returns_two_percent_of_amount(self, active_account):
-        """Fees equal to 2% of the transaction amount, rounded to two decimal places."""
+    """Tests for the CreditCardTransaction.process method when the transaction is successful.""" 
+    def test_account_inactive_fails(self):
+        """If the account is inactive, the transaction fails."""
+        account = BankAccount(
+            account_id=123456,      
+            balance=Decimal("1000.00"),
+            owner=None,
+            status=AccountStatus.CLOSED,
+        )
         txn = CreditCardTransaction(
             "CC001",
             Decimal("100.00"),
+            account,
+            "AUG111",
+        )
+        txn.process()
+        assert txn.status == TransactionStatus.FAILED
+        
+    
+def test_insufficient_funds_fails(self,active_account):
+        """If the account has insufficient funds, the transaction fails."""
+        txn = CreditCardTransaction(
+            "CC001",
+            Decimal("1000.00"),
             active_account,
             "AUG111",
         )
         txn.process()
-        expected_fee = Decimal("2.00")  # 2% of  100.00
-        assert txn.fees == expected_fee
+        assert txn.status == TransactionStatus.FAILED
