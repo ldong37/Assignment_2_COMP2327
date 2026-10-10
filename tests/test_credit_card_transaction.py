@@ -11,6 +11,7 @@ import pytest
 
 from account.bank_account import BankAccount
 from account.account_status import AccountStatus
+
 from transaction.credit_card_transaction import CreditCardTransaction
 from transaction.transaction_status import TransactionStatus
 
@@ -25,7 +26,7 @@ def active_account():
         account_id=123456,
         balance=Decimal("1000.00"),
         owner=None,
-        status=BankAccount.AccountStatus.ACTIVE,
+        status=AccountStatus.ACTIVE,
     )
     
 
@@ -83,3 +84,20 @@ class TestInit:
         assert txn.account == active_account
         assert txn.authorization_code == "AUG111"
         assert txn.status == TransactionStatus.PENDING
+        
+        
+class TestFees:
+    """Tests for the fees property of CreditCardTransaction."""
+
+    def test_return_two_percent_of_amount(self, active_account):
+        """Fees equal to 2% of the transaction amount, rounded to two decimal places."""
+        txn = CreditCardTransaction(
+            "CC001",
+            Decimal("100.00"),
+            active_account,
+            "AUG111",
+        )
+        expected_fee = Decimal("2.00")  # 2% of 100.00
+        assert txn.fees == expected_fee
+
+
