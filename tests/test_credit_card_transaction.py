@@ -97,7 +97,7 @@ class TestFees:
             active_account,
             "AUG111",
         )
-        expected_fee = Decimal("2.00")  # 2% of 100.00
+        expected_fee = Decimal("2.00")  # 2% of  100.00
         assert txn.fees == expected_fee
 
 
